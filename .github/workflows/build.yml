@@ -2,6 +2,8 @@ name: Build APK
 on:
   push:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,3 +17,11 @@ jobs:
       - run: cp app/build/outputs/apk/debug/app-debug.apk SnapMerge.apk
       - uses: actions/upload-artifact@v4
         with: { name: SnapMerge-APK, path: SnapMerge.apk }
+      - name: Publish APK as a release (easy download from the phone)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: SnapMerge APK
+          body: "حمّل SnapMerge.apk وثبّته على الأندرويد."
+          files: SnapMerge.apk
+          make_latest: true
